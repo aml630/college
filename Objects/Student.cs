@@ -115,7 +115,9 @@ namespace CollegeNameSpace
       SqlDataReader rdr = null;
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("SELECT course_id FROM student_course WHERE student_id = @StudentId;", conn);
+      List<Course> courses = new List<Course>{};
+
+      SqlCommand cmd = new SqlCommand("select courses.* from students join student_course on (students.id = student_course.student_id) join courses on (student_course.course_id = courses.id) where students.id = @StudentId;", conn);
 
       SqlParameter studentIdParameter = new SqlParameter();
       studentIdParameter.ParameterName = "@StudentId";
@@ -125,50 +127,25 @@ namespace CollegeNameSpace
 
       rdr = cmd.ExecuteReader();
 
-      List<int> courseIds = new List<int> {};
-
       while (rdr.Read())
       {
         int courseId = rdr.GetInt32(0);
-        courseIds.Add(courseId);
+        string courseTitle = rdr.GetString(1);
+        int courseNumber = rdr.GetInt32(2);
+        Course newCourse = new Course(courseTitle, courseNumber, courseId);
+        courses.Add(newCourse);
       }
       if (rdr != null)
       {
         rdr.Close();
       }
-
-      List<Course> courses = new List<Course> {};
-
-      foreach (int courseId in courseIds)
-      {
-        SqlDataReader queryReader = null;
-        SqlCommand courseQuery = new SqlCommand("SELECT * FROM courses WHERE id = @CourseId;", conn);
-
-        SqlParameter courseIdParameter = new SqlParameter();
-        courseIdParameter.ParameterName = "@CourseId";
-        courseIdParameter.Value = courseId;
-        courseQuery.Parameters.Add(courseIdParameter);
-
-        queryReader = courseQuery.ExecuteReader();
-        while (queryReader.Read())
-        {
-          int thisCourseId = queryReader.GetInt32(0);
-          string courseTitle = queryReader.GetString(1);
-          int courseNumber = queryReader.GetInt32(2);
-          Course foundCourse = new Course(courseTitle, courseNumber, thisCourseId);
-          courses.Add(foundCourse);
-        }
-        if (queryReader != null)
-        {
-          queryReader.Close();
-        }
-      }
       if (conn != null)
       {
         conn.Close();
       }
-      return courses;
+      return courses;  
     }
+
     public static void DeleteAll()
     {
       SqlConnection conn = DB.Connection();

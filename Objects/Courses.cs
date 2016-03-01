@@ -55,7 +55,7 @@ namespace CollegeNameSpace
       SqlConnection conn = DB.Connection();
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("INSERT INTO student_course (student_id, course_id) VALUES (@CourseId, @StudentId)", conn);
+      SqlCommand cmd = new SqlCommand("INSERT INTO student_course (course_id, student_id) VALUES (@CourseId, @StudentId)", conn);
 
       SqlParameter CourseIdParameter = new SqlParameter();
       CourseIdParameter.ParameterName = "@CourseId";
@@ -192,19 +192,20 @@ namespace CollegeNameSpace
       SqlDataReader rdr = null;
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("SELECT task_id FROM categories_tasks WHERE Course_id = @CourseId;", conn);
+      SqlCommand cmd = new SqlCommand("SELECT student_id FROM student_course WHERE course_id = @CourseId;", conn);
       SqlParameter CourseIdParameter = new SqlParameter();
+
       CourseIdParameter.ParameterName = "@CourseId";
       CourseIdParameter.Value = this.GetId();
       cmd.Parameters.Add(CourseIdParameter);
 
       rdr = cmd.ExecuteReader();
 
-      List<int> taskIds = new List<int> {};
+      List<int> studentIds = new List<int> {};
       while(rdr.Read())
       {
-        int taskId = rdr.GetInt32(0);
-        taskIds.Add(taskId);
+        int studentId = rdr.GetInt32(0);
+        studentIds.Add(studentId);
       }
       if (rdr != null)
       {
@@ -212,7 +213,7 @@ namespace CollegeNameSpace
       }
 
       List<Student> students = new List<Student> {};
-      foreach (var studentId in students)
+      foreach (int studentId in studentIds)
       {
         SqlDataReader queryReader = null;
         SqlCommand studentQuery = new SqlCommand("SELECT * FROM students WHERE id = @StudentId;", conn);
@@ -225,11 +226,11 @@ namespace CollegeNameSpace
         queryReader = studentQuery.ExecuteReader();
         while(queryReader.Read())
         {
-              int thisStudentId = queryReader.GetInt32(0);
-              string studentName = queryReader.GetString(1);
-              DateTime studentEnrollDate = queryReader.GetDateTime(2);
-              Student foundStudent = new Student(studentName, studentEnrollDate, thisStudentId);
-              students.Add(foundStudent);
+          int thisStudentId = queryReader.GetInt32(0);
+          string studentName = queryReader.GetString(1);
+          DateTime studentEnrollDate = queryReader.GetDateTime(2);
+          Student foundStudent = new Student(studentName, studentEnrollDate, thisStudentId);
+          students.Add(foundStudent);
         }
         if (queryReader != null)
         {
@@ -249,7 +250,7 @@ namespace CollegeNameSpace
       SqlDataReader rdr;
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("UPDATE courses SET name = @NewTitle OUTPUT INSERTED.title WHERE id = @CourseId;", conn);
+      SqlCommand cmd = new SqlCommand("UPDATE courses SET title = @NewTitle OUTPUT INSERTED.title WHERE id = @CourseId;", conn);
 
       SqlParameter newTitleParameter = new SqlParameter();
       newTitleParameter.ParameterName = "@NewTitle";

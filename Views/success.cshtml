@@ -1,2 +1,8 @@
-<h1>Success!</h1>
-<a href="/">Return home</a>
+<h1>Success</h1>
+
+<ul>
+@foreach (var student in Model)
+{
+<li>@student.GetName()</li>
+}
+</ul>

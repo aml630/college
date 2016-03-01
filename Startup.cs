@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 
-namespace CollegeNamespace
+namespace CollegeNameSpace
 {
   public class Startup
   {

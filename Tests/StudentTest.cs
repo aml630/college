@@ -4,7 +4,7 @@ using System;
 using System.Data;
 using System.Data.SqlClient;
 
-namespace CollegeNamespace
+namespace CollegeNameSpace
 {
   public class StudentTest : IDisposable
   {
@@ -21,6 +21,9 @@ namespace CollegeNamespace
 
       //Assert
       Assert.Equal(0, result);
+
+      Student.DeleteAll();
+      Course.DeleteAll();
     }
 
     [Fact]
@@ -32,6 +35,9 @@ namespace CollegeNamespace
 
       //Assert
       Assert.Equal(firstStudent, secondStudent);
+
+      Student.DeleteAll();
+      Course.DeleteAll();
     }
 
     [Fact]
@@ -47,6 +53,9 @@ namespace CollegeNamespace
 
       //Assert
       Assert.Equal(testList, result);
+
+      Student.DeleteAll();
+      Course.DeleteAll();
     }
 
 
@@ -66,6 +75,9 @@ namespace CollegeNamespace
 
       //Assert
       Assert.Equal(testId, result);
+
+      Student.DeleteAll();
+      Course.DeleteAll();
     }
 
     [Fact]
@@ -80,77 +92,88 @@ namespace CollegeNamespace
 
       //Assert
       Assert.Equal(testStudent, result);
+
+      Student.DeleteAll();
+      Course.DeleteAll();
     }
 
-    // [Fact]
-    // public void Test_AddCategory_AddsCategoryToStudent()
-    // {
-    //   //Arrange
-    //   Student testStudent = new Student("Mow the lawn", 1);
-    //   testStudent.Save();
-    //
-    //   Category testCategory = new Category("Home stuff", 1);
-    //   testCategory.Save();
-    //
-    //   //Act
-    //   testStudent.AddCategory(testCategory);
-    //
-    //   List<Category> result = testStudent.GetCategories();
-    //   List<Category> testList = new List<Category>{testCategory};
-    //
-    //   //Assert
-    //   Assert.Equal(testList, result);
-    // }
+    [Fact]
+    public void Test_AddCourse_AddsCourseToStudent()
+    {
+      //Arrange
+      Student testStudent =new Student("Magic Johnson", new DateTime(2016, 01, 01));
+      testStudent.Save();
 
-  // [Fact]
-  // public void Test_GetCategories_ReturnsAllStudentCategories()
-  // {
-  //   //Arrange
-  //   Student testStudent = new Student("Mow the lawn", 1);
-  //   testStudent.Save();
-  //
-  //   Category testCategory1 = new Category("Home stuff", 1);
-  //   testCategory1.Save();
-  //
-  //   Category testCategory2 = new Category("Work stuff", 1);
-  //   testCategory2.Save();
-  //
-  //   //Act
-  //   testStudent.AddCategory(testCategory1);
-  //   List<Category> result = testStudent.GetCategories();
-  //   List<Category> testList = new List<Category> {testCategory1};
-  //
-  //   //Assert
-  //   Assert.Equal(testList, result);
-  // }
+      Course testCourse = new Course("Math", 101);
+      testCourse.Save();
 
-  // public void Test_Delete_DeletesStudentAssociationsFromDatabase()
-  // {
-  //   //Arrange
-  //   Category testCategory = new Category("Home stuff", 1);
-  //   testCategory.Save();
-  //
-  //   string testDescription = "Mow the lawn";
-  //   int testcompletion = 1;
-  //   Student testStudent = new Student(testDescription, testcompletion);
-  //   testStudent.Save();
-  //
-  //   //Act
-  //   testStudent.AddCategory(testCategory);
-  //   testStudent.Delete();
-  //
-  //   List<Student> resultCategoryStudents = testCategory.GetStudents();
-  //   List<Student> testCategoryStudents = new List<Student> {};
-  //
-  //   //Assert
-  //   Assert.Equal(testCategoryStudents, resultCategoryStudents);
-  // }
+      testStudent.AddCourse(testCourse);
+
+      //Act
+      List<Course> result = testStudent.GetCourses();
+
+      List<Course> testList = new List<Course>{testCourse};
+
+      //Assert
+      Assert.Equal(testList, result);
+
+      Student.DeleteAll();
+      Course.DeleteAll();
+    }
+
+  [Fact]
+  public void Test_GetCourses_ReturnsAllStudentCourses()
+  {
+    //Arrange
+    Student testStudent = new Student("Magic Johnson", new DateTime(2016, 01, 01));
+    testStudent.Save();
+
+    Course testCourse1 = new Course("Math", 101);
+    testCourse1.Save();
+
+    Course testCourse2 = new Course("Gym", 101);
+    testCourse2.Save();
+
+    //Act
+    testStudent.AddCourse(testCourse1);
+    List<Course> result = testStudent.GetCourses();
+    List<Course> testList = new List<Course> {testCourse1};
+
+    //Assert
+    Assert.Equal(testList, result);
+
+    Student.DeleteAll();
+    Course.DeleteAll();
+  }
+
+  public void Test_Delete_DeletesStudentAssociationsFromDatabase()
+  {
+    //Arrange
+    Course testCourse = new Course("Math", 101);
+    testCourse.Save();
+
+    Student testStudent = new Student("Magic Johnson", new DateTime(2016, 01, 01));
+    testStudent.Save();
+
+    //Act
+    testStudent.AddCourse(testCourse);
+    testStudent.Delete();
+
+    List<Student> resultCourseStudents = testCourse.GetStudents();
+    List<Student> testCourseStudents = new List<Student> {};
+
+    //Assert
+    Assert.Equal(testCourseStudents, resultCourseStudents);
+
+    Student.DeleteAll();
+    Course.DeleteAll();
+  }
 
 
     public void Dispose()
     {
       Student.DeleteAll();
-      // Category.DeleteAll();
+      Course.DeleteAll();
     }
   }
 }

@@ -6,6 +6,7 @@
   </head>
   <body>
     <h1>Students and Courses</h1>
+    <h2>South Eastern Oregon State Directional Charter State University</h2>
     <hr />
 
     <h2>Add Student</h2>
@@ -19,7 +20,7 @@
       <ul>
       @foreach (var student in Model)
       {
-      <li>@student.GetName()</li>
+        <li><a href="/student_courses/@student.GetId()">@student.GetName()</a> | enrolled on: @student.GetDate().ToString("MM/dd/yyyy")</li>
       }
       </ul>
 

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Students and Courses</title>
+  </head>
+  <body>
+    <h2>Studies</h2>
+    <ul>
+      @foreach (var course in Model)
+      {
+        <li>@course.GetTitle() @course.GetNumber()</li>
+      }
+    </ul>
+    <a href="/">back home</a>
+  </body>
+</html>

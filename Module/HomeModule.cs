@@ -23,6 +23,12 @@ namespace CollegeNameSpace
         return View["index.cshtml", allStudents];
       };
 
+      Get["/student_courses/{id}"]= parameters =>{
+        Student selectedStudent = Student.Find(parameters.id);
+        List<Course> studentCourses = selectedStudent.GetCourses();
+        return View["course_list.cshtml", studentCourses];
+      };
+
     }
   }
 }

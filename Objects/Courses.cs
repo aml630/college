@@ -192,7 +192,9 @@ namespace CollegeNameSpace
       SqlDataReader rdr = null;
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("SELECT student_id FROM student_course WHERE course_id = @CourseId;", conn);
+      List<Student> students = new List<Student>{};
+
+      SqlCommand cmd = new SqlCommand("SELECT students. * from courses join student_course on (courses.id = student_course.course_id) join students on (student_course.student_id = students.id) where courses.id = @CourseId;", conn);
       SqlParameter CourseIdParameter = new SqlParameter();
 
       CourseIdParameter.ParameterName = "@CourseId";
@@ -205,42 +207,21 @@ namespace CollegeNameSpace
       while(rdr.Read())
       {
         int studentId = rdr.GetInt32(0);
-        studentIds.Add(studentId);
+        string studentName = rdr.GetString(1);
+        DateTime studentEnrollDate = rdr.GetDateTime(2);
+        Student newStudent = new Student(studentName, studentEnrollDate, studentId);
+        students.Add(newStudent);
       }
       if (rdr != null)
       {
         rdr.Close();
       }
-
-      List<Student> students = new List<Student> {};
-      foreach (int studentId in studentIds)
-      {
-        SqlDataReader queryReader = null;
-        SqlCommand studentQuery = new SqlCommand("SELECT * FROM students WHERE id = @StudentId;", conn);
-
-        SqlParameter studentIdParameter = new SqlParameter();
-        studentIdParameter.ParameterName = "@StudentId";
-        studentIdParameter.Value = studentId;
-        studentQuery.Parameters.Add(studentIdParameter);
-
-        queryReader = studentQuery.ExecuteReader();
-        while(queryReader.Read())
-        {
-          int thisStudentId = queryReader.GetInt32(0);
-          string studentName = queryReader.GetString(1);
-          DateTime studentEnrollDate = queryReader.GetDateTime(2);
-          Student foundStudent = new Student(studentName, studentEnrollDate, thisStudentId);
-          students.Add(foundStudent);
-        }
-        if (queryReader != null)
-        {
-          queryReader.Close();
-        }
-      }
       if (conn != null)
       {
         conn.Close();
       }
+
+
       return students;
     }
 

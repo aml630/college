@@ -5,11 +5,18 @@
     <title>Students and Courses</title>
   </head>
   <body>
-    <h2>Studies</h2>
+
+    <form action = '/student_courses/@Model["student"].GetId()' method = "post">
+      <input name = "course" type = "text"></input>
+      <input name = "courseNumber" type = "text"></input>
+      <button>Add Course</button>
+    </form>
+
+    <h2>@Model["student"].GetName()'s Studies</h2>
     <ul>
-      @foreach (var course in Model)
+      @foreach (var course in Model["studentCourses"])
       {
-        <li>@course.GetTitle() @course.GetNumber()</li>
+        <li><a href = "/course_students/@course.GetId()">@course.GetTitle() @course.GetNumber()</a></li>
       }
     </ul>
     <a href="/">back home</a>

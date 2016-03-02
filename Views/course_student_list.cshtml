@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>This course has these students</title>
+  </head>
+  <body>
+    <h3>Add a student to this course</h3>
+    
+
+    <h2>@Model["course"].GetTitle() @Model["course"].GetNumber() Students</h2>
+    <ul>
+      @foreach (var student in Model["CoursesStudents"])
+      {
+        <li>@student.GetName()</li>
+      }
+    </ul>
+    <a href="/">back home</a>
+  </body>
+</html>

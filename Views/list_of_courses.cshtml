@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Students and Courses</title>
+  </head>
+  <body>
+    <h1>Courses</h1>
+    <h2>South Eastern Oregon State Directional Charter State University</h2>
+    <hr />
+
+    <h2>Add Course</h2>
+    <form action = '/course_add' method = "post">
+      <input name = "course" type = "text"></input>
+      <input name = "courseNumber" type = "text"></input>
+      <button>Add Course</button>
+    </form>
+
+        <ul>
+          @foreach (var course in Model)
+          {
+            <li><a href = "/course_students/@course.GetId()">@course.GetTitle() @course.GetNumber()</a></li>
+          }
+        </ul>
+
+    <h4><a href="/">Home</a></h4>
+
+  </body>
+</html>
